@@ -11,6 +11,8 @@ export const Login = () => {
 
   const { setAuth } = useAuth();
 
+ 
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -29,8 +31,7 @@ export const Login = () => {
       });
       setAlert({});
       localStorage.setItem("token", data.token);
-      setAlert(data);
-      
+      setAuth(data);
     } catch (error) {
       setAlert({
         msg: error.response.data.msg,
