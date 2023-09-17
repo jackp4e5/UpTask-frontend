@@ -1,0 +1,14 @@
+export const formatearFecha = (fecha) => {
+  const nuevaFecha = new Date(fecha?.split("T")[0].split("-"));
+
+  /* const nuevaFecha = new Date(fecha.split('T')[0].split('-')) los split es para solucionmar un problema con la fecha porque no muestra bien el dia  */
+
+  const options = {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  };
+
+  return nuevaFecha.toLocaleDateString("es-ES", options);
+};
