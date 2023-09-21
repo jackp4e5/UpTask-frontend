@@ -4,6 +4,10 @@ import { useEffect } from "react";
 import ModalFormularioTarea from "../components/ModalFormularioTarea";
 import { Tarea } from "../components/Tarea";
 import { formatearFecha } from "../helpers/fecha";
+import { ModalEliminarTarea } from "../components/ModalEliminarTarea";
+import { Alert } from "../components/Alert";
+import { Colaborador } from "../components/Colaborador";
+import { ModalEliminarColaborador } from "../components/ModalEliminarColaborador";
 
 export const Proyecto = () => {
   const params = useParams();
@@ -13,6 +17,7 @@ export const Proyecto = () => {
     cargando,
     eliminarProyecto,
     handleModalTarea,
+    alert,
   } = useProyectos();
 
   useEffect(() => {
@@ -28,6 +33,7 @@ export const Proyecto = () => {
 
   const { nombre, descripcion, cliente, fechaEntrega } = proyecto;
 
+  const { msg } = alert;
   return cargando ? (
     <div className="border border-blue-300 shadow rounded-md p-4 max-w-sm w-full mx-auto">
       <div className="animate-pulse flex space-x-4">
@@ -139,6 +145,12 @@ export const Proyecto = () => {
       </button>
 
       <p className="font-bold text-xl mt-10">Tareas del Proyecto</p>
+
+      <div className="flex justify-center ">
+        <div className=" w-full md:w-1/4 lg:w-1/4">
+          {msg && <Alert alert={alert} />}
+        </div>
+      </div>
       <div className="bg-white shadow mt-10 rounded-lg">
         {proyecto.tareas?.length ? (
           proyecto.tareas?.map((tarea) => (
@@ -151,7 +163,33 @@ export const Proyecto = () => {
         )}
       </div>
 
+      <div className="flex items-center justify-between mt-10">
+        <p className=" font-bold text-xl my-5 p-10 capitalize ">
+          colaboradores
+        </p>
+        <Link
+          className="text-gray-400 uppercase font-bold hover:text-sky-700 transition-colors"
+          to={`/proyectos/nuevo-colaborador/${proyecto._id}`}
+        >
+          Añidir
+        </Link>
+      </div>
+
+      <div className="bg-white shadow mt-10 rounded-lg">
+        {proyecto.colaboradores?.length ? (
+          proyecto.colaboradores?.map((colaborador) => (
+            <Colaborador key={colaborador._id} colaborador={colaborador} />
+          ))
+        ) : (
+          <p className="text-center my-5 p-10 capitalize ">
+            No hay colaboradores en este proyecto
+          </p>
+        )}
+      </div>
+
       <ModalFormularioTarea />
+      <ModalEliminarTarea />
+      <ModalEliminarColaborador />
     </div>
   );
 };

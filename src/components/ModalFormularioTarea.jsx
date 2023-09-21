@@ -29,7 +29,7 @@ const ModalFormularioTarea = () => {
       setPrioridad(tarea.prioridad);
       return;
     }
-    setId("");
+    setId(tarea._id);
     setNombre("");
     setFechaEntrega("");
     setDescripcion("");
