@@ -2,6 +2,7 @@ import { PreviewProyectos } from "../components/PreviewProyecto";
 import useProyectos from "../hooks/useProyectos";
 
 export const Proyectos = () => {
+  
   const { proyectos } = useProyectos();
 
   return (

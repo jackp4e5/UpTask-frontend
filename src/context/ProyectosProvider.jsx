@@ -143,6 +143,8 @@ const ProyectosProvider = ({ children }) => {
 
       const { data } = await clienteAxios(`/proyectos/${id}`, config);
       setProyecto(data);
+
+      setAlert({})
     } catch (error) {
       console.log(error);
     }
@@ -179,7 +181,13 @@ const ProyectosProvider = ({ children }) => {
         navegate("/proyectos");
       }, 3000);
     } catch (error) {
-      console.log(error);
+      setAlert({
+        msg: error.response.data.msg,
+        error: true,
+      });
+      setTimeout(() => {
+        setAlert({});
+      }, 3000);
     }
   };
 
@@ -301,7 +309,13 @@ const ProyectosProvider = ({ children }) => {
       setModalEliminarTarea(false);
       setTarea({});
     } catch (error) {
-      console.log(error);
+      setAlert({
+        msg: error.response.data.msg,
+        error: true,
+      });
+      setTimeout(() => {
+        setAlert({});
+      }, 3000);
     }
   };
 
@@ -355,10 +369,12 @@ const ProyectosProvider = ({ children }) => {
       setColaborador({});
       setTimeout(() => {
         setAlert({});
-        navegate("/proyectos");
       }, 2000);
     } catch (error) {
       setAlert({ msg: error.response.data.msg, error: true });
+      setTimeout(() => {
+        setAlert({});
+      }, 2000);
     }
   };
 
@@ -397,10 +413,18 @@ const ProyectosProvider = ({ children }) => {
         error: false,
       });
       setColaborador({});
-      setAlert({});
       setModalEliminarcolaborador(false);
+      setTimeout(() => {
+        setAlert({});
+      }, 3000);
     } catch (error) {
-      console.log(error.response);
+      setAlert({
+        msg: error.response.data.msg,
+        error: true,
+      });
+      setTimeout(() => {
+        setAlert({});
+      }, 3000);
     }
   };
 
