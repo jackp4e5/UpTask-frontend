@@ -9,6 +9,9 @@ import { ModalEliminarTarea } from "../components/ModalEliminarTarea";
 import { Alert } from "../components/Alert";
 import { Colaborador } from "../components/Colaborador";
 import { ModalEliminarColaborador } from "../components/ModalEliminarColaborador";
+import { io } from "socket.io-client";
+
+let socket;
 
 export const Proyecto = () => {
   const params = useParams();
@@ -19,12 +22,47 @@ export const Proyecto = () => {
     eliminarProyecto,
     handleModalTarea,
     alert,
+    submitTareasProyecto,
+    submitEliminarTarea,
+    submitTareaActualizada,
+    cambiarEstadoTarea,
   } = useProyectos();
 
   const admin = useAdmin();
   useEffect(() => {
     obtenerProyecto(params.id);
   }, []);
+
+  useEffect(() => {
+    socket = io(import.meta.env.VITE_BACKEND_URL);
+    socket.emit("abrir proyecto", params.id);
+  }, []);
+
+  useEffect(() => {
+    socket.on("tarea agregada", (tareaNueva) => {
+      if (tareaNueva.proyecto === proyecto._id) {
+        submitTareasProyecto(tareaNueva);
+      }
+    });
+
+    socket.on("tarea actualizada", (tarea) => {
+      if (tarea.proyecto._id === proyecto._id) {
+        submitTareaActualizada(tarea);
+      }
+    });
+
+    socket.on("tarea eliminada", (tarea) => {
+      if (tarea.proyecto === proyecto._id) {
+        submitEliminarTarea(tarea);
+      }
+    });
+
+    socket.on('nuevo estado', tarea => {
+      if (tarea.proyecto._id === proyecto._id) {
+        cambiarEstadoTarea(tarea)
+      }
+    })
+  });
 
   const handleClick = () => {
     if (confirm("¿Deseas eliminar este Proyecto?")) {
@@ -55,9 +93,7 @@ export const Proyecto = () => {
   const { nombre, descripcion, cliente, fechaEntrega } = proyecto;
 
   const { msg } = alert;
-  return msg && alert.error ? (
-    <Alert alert={alert} />
-  ) : (
+  return (
     <div>
       <div className="flex flex-col  md:flex-row gap-5 justify-between items-center ">
         <h1 className="font-black text-4xl ">{nombre}</h1>
@@ -162,8 +198,8 @@ export const Proyecto = () => {
       </div>
       <div className="bg-white shadow mt-10 rounded-lg">
         {proyecto.tareas?.length ? (
-          proyecto.tareas?.map((tarea) => (
-            <Tarea key={tarea._id} tarea={tarea} />
+          proyecto.tareas?.map((tarea, id) => (
+            <Tarea key={`${tarea._id}${id}`} tarea={tarea} />
           ))
         ) : (
           <p className="text-center my-5 p-10 capitalize ">

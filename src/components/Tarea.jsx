@@ -3,19 +3,25 @@ import useAdmin from "../hooks/useAdmin";
 import useProyectos from "../hooks/useProyectos";
 
 export const Tarea = ({ tarea }) => {
-  const { handleModalEditarTarea, handleModalEliminarTarea } = useProyectos();
-  const { nombre, descripcion, prioridad, fechaEntrega, estado } = tarea;
+  const { handleModalEditarTarea, handleModalEliminarTarea, completarTarea } =
+    useProyectos();
+  const { nombre, descripcion, prioridad, fechaEntrega, estado, _id } = tarea;
   const admin = useAdmin();
   return (
     <div className="border-b  p-5 flex justify-between items-center">
-      <div>
+      <div className="flex flex-col items-start">
         <p className="mb-1 text-xl">{nombre}</p>
         <p className="mb-1 text-sm text-gray-500 uppercase">{descripcion}</p>
         <p className="mb-1 text-xl">{formatearFecha(fechaEntrega)}</p>
         <p className="mb-1 text-gray-600 ">Prioridad: {prioridad}</p>
+        {estado && (
+          <p className="text-xs bg-green-600 uppercase p-1 rounded-lg text-white">
+            Completada por {tarea.completado?.name}
+          </p>
+        )}
       </div>
 
-      <div className="flex gap-2">
+      <div className="flex flex-col md:flex-row gap-2">
         {admin && (
           <button
             type="button"
@@ -25,21 +31,17 @@ export const Tarea = ({ tarea }) => {
             Editar
           </button>
         )}
-        {estado ? (
-          <button
-            type="button"
-            className="bg-sky-600 px-4 py-3 text-white uppercase font-bold text-sm rounded-lg"
-          >
-            Completa
-          </button>
-        ) : (
-          <button
-            type="button"
-            className="bg-gray-600 px-4 py-3 text-white uppercase font-bold text-sm rounded-lg"
-          >
-            Incompleta
-          </button>
-        )}
+
+        <button
+          onClick={() => completarTarea(_id)}
+          type="button"
+          className={`${
+            estado ? "bg-sky-600" : "bg-gray-600"
+          } px-4 py-3 text-white uppercase font-bold text-sm rounded-lg`}
+        >
+          {estado ? "completa" : "Incompleta"}
+        </button>
+
         {admin && (
           <button
             type="button"
