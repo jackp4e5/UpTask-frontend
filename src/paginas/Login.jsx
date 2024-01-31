@@ -2,7 +2,8 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Alert } from "../components/Alert";
 import useAuth from "../hooks/useAuth";
-import clienteAxios from "../config/ClienteAxios";
+// import clienteAxios from "../config/ClienteAxios";
+import axios from "axios";
 
 export const Login = () => {
   const [email, setEmail] = useState("");
@@ -25,7 +26,8 @@ export const Login = () => {
     }
 
     try {
-      const { data } = await clienteAxios.post(/* "/usuarios/login" */`{import.meta.env.VITE_BACKEND_URL/api/usuarios/login}`, {
+      const urlAxios = "http://localhost:4000/api/usuarios/login"
+      const { data } = await axios.post(urlAxios /*"/usuarios/login" `{import.meta.env.VITE_BACKEND_URL/api/usuarios/login}` */, {
         email,
         password,
       });
