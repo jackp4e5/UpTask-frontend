@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Alert } from "../components/Alert";
-import clienteAxios from "../config/ClienteAxios";
+// import clienteAxios from "../config/ClienteAxios";
 import axios from "axios";
 
 export const Registrar = () => {
