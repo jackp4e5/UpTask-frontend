@@ -22,7 +22,8 @@ const AuthProvider = ({ children }) => {
       }
 
       try {
-        const { data } = await clienteAxios("/usuarios/perfil", config);
+        const urlAxios = "http://localhost:4000/api/usuarios/perfil"
+        const { data } = await axios(/* "/usuarios/perfil" */ urlAxios, config);
         setAuth(data);
       } catch (error) {
        setAuth({})
